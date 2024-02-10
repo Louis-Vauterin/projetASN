@@ -1,21 +1,3 @@
--- Copyright (C) 2018  Intel Corporation. All rights reserved.
--- Your use of Intel Corporation's design tools, logic functions 
--- and other software and tools, and its AMPP partner logic 
--- functions, and any output files from any of the foregoing 
--- (including device programming or simulation files), and any 
--- associated documentation or information are expressly subject 
--- to the terms and conditions of the Intel Program License 
--- Subscription Agreement, the Intel Quartus Prime License Agreement,
--- the Intel FPGA IP License Agreement, or other applicable license
--- agreement, including, without limitation, that your use is for
--- the sole purpose of programming logic devices manufactured by
--- Intel and sold by Intel or its authorized distributors.  Please
--- refer to the applicable agreement for further details.
-
--- PROGRAM		"Quartus Prime"
--- VERSION		"Version 18.0.0 Build 614 04/24/2018 SJ Lite Edition"
--- CREATED		"Tue Jan 12 09:49:06 2021"
-
 LIBRARY ieee;
 USE ieee.std_logic_1164.all; 
 
@@ -24,6 +6,8 @@ LIBRARY work;
 ENTITY CPU IS 
 	PORT
 	(
+		reset :  IN  STD_LOGIC;
+		clock :  IN  STD_LOGIC;
 		MAX10_CLK1_50 :  IN  STD_LOGIC;
 		SW :  IN  STD_LOGIC_VECTOR(9 DOWNTO 0);
 		HEX0 :  OUT  STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -33,13 +17,10 @@ ENTITY CPU IS
 		HEX4 :  OUT  STD_LOGIC_VECTOR(7 DOWNTO 0);
 		HEX5 :  OUT  STD_LOGIC_VECTOR(7 DOWNTO 0);
 		LEDR :  OUT  STD_LOGIC_VECTOR(9 DOWNTO 0)
-		
 	);
 END CPU;
 
 ARCHITECTURE bdf_type OF CPU IS 
-
-
 
 COMPONENT seg7_lut
 	PORT(iDIG : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -54,6 +35,51 @@ COMPONENT dig2dec
 		 seg2 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
 		 seg3 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
 		 seg4 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+	);
+END COMPONENT;
+
+COMPONENT alu
+	PORT(clock : IN STD_LOGIC;
+		 A : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+		 B : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+		 selR : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
+		 result : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		 --val : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+	);
+END COMPONENT;
+
+COMPONENT fetch
+	PORT(clock : IN STD_LOGIC;
+		 fallback_index : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
+		 flags : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
+		 jump_index : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
+		 last_index : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
+		 index : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
+	);
+END COMPONENT;
+
+COMPONENT register_file
+	PORT(clock : IN STD_LOGIC;
+		 enable : IN STD_LOGIC;
+		 addrDest : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+		 addrA : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+		 addrB : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+		 data_in : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+		 outA : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+		 ouTB : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+	);
+END COMPONENT;
+
+COMPONENT decoder
+	PORT(reset : IN STD_LOGIC;
+		 clock : IN STD_LOGIC;
+		 instruction : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+		 addrDest : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		 imm : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		 selR : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
+		 addrA : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		 addrB : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		 enable : OUT STD_LOGIC
 	);
 END COMPONENT;
 
@@ -73,16 +99,10 @@ SIGNAL	seg7_in3 :  STD_LOGIC_VECTOR(3 DOWNTO 0);
 SIGNAL	seg7_in4 :  STD_LOGIC_VECTOR(3 DOWNTO 0);
 SIGNAL	seg7_in5 :  STD_LOGIC_VECTOR(7 DOWNTO 0);
 
+SIGNAL aluA
+
 
 BEGIN 
-
-
-
-
-
-
-
-
 
 
 
