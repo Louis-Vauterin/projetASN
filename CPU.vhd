@@ -61,6 +61,7 @@ END COMPONENT;
 
 COMPONENT register_file
 	PORT(clock : IN STD_LOGIC;
+		 reset : IN STD_LOGIC;
 		 enable : IN STD_LOGIC;
 		 addrDest : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
 		 addrA : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -178,6 +179,7 @@ PORT MAP(clock => clock,
 
 b2v_inst8 : register_file
 PORT MAP(clock => clock,
+		 reset => reset,
 		 enable => rfEnable,
 		 addrDest => rfAddrD,
 		 addrA => rfAddrA,
