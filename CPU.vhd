@@ -45,6 +45,7 @@ COMPONENT alu
 		 selR : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
 		 result : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
      zero_flag : OUT STD_LOGIC;
+
 		 --val : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
 	);
 END COMPONENT;
@@ -61,6 +62,7 @@ END COMPONENT;
 
 COMPONENT register_file
 	PORT(clock : IN STD_LOGIC;
+		 reset : IN STD_LOGIC;
 		 enable : IN STD_LOGIC;
 		 addrDest : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
 		 addrA : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -178,6 +180,7 @@ PORT MAP(clock => clock,
 
 b2v_inst8 : register_file
 PORT MAP(clock => clock,
+		 reset => reset,
 		 enable => rfEnable,
 		 addrDest => rfAddrD,
 		 addrA => rfAddrA,
