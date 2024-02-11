@@ -23,7 +23,7 @@ architecture Decoder_arch of Decoder is
 
     signal ins:         std_logic_vector(15 downto 0);
     signal op:          std_logic_vector(3 downto 0);
-    --signal funct:       std_logic_vector(1 downto 0);
+    signal format:      std_logic_vector(1 down to 0)
     --signal jump_sig:    std_logic;
     --signal enable_RAM_sig: std_logic;
 
@@ -31,7 +31,8 @@ begin
 
     -- decode instruction
     format <= ins(15 downto 14);
-    op <= ins(13 down to 11)
+    op <= ins(13 down to 11);
+    selR <= ins(15 down to 11);
     addrA <= ins(4 downto 2);
     addrB <= ins(7 downto 5);
     addrDest <= ins(10 downto 8);
