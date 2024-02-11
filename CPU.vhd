@@ -44,6 +44,7 @@ COMPONENT alu
 		 B : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
 		 selR : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
 		 result : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+     zero_flag : OUT STD_LOGIC;
 		 --val : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
 	);
 END COMPONENT;
@@ -66,7 +67,7 @@ COMPONENT register_file
 		 addrB : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
 		 data_in : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
 		 outA : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-		 ouTB : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+		 outB : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
 	);
 END COMPONENT;
 
@@ -99,12 +100,36 @@ SIGNAL	seg7_in3 :  STD_LOGIC_VECTOR(3 DOWNTO 0);
 SIGNAL	seg7_in4 :  STD_LOGIC_VECTOR(3 DOWNTO 0);
 SIGNAL	seg7_in5 :  STD_LOGIC_VECTOR(7 DOWNTO 0);
 
-SIGNAL aluA
+SIGNAL aluA : STD_LOGIC_VECTOR(15 DOWNTO 0);
+SIGNAL aluB : STD_LOGIC_VECTOR(15 DOWNTO 0);
+SIGNAL aluSelR : STD_LOGIC_VECTOR(4 DOWNTO 0);
+SIGNAL aluResult : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL aluZero_f : STD_LOGIC;
+
+SIGNAL fetFB_i : STD_LOGIC_VECTOR(6 DOWNTO 0);
+SIGNAL fetFlags : STD_LOGIC_VECTOR(6 DOWNTO 0);
+SIGNAL fetJump_i : STD_LOGIC_VECTOR(6 DOWNTO 0);
+SIGNAL fetLast_i : STD_LOGIC_VECTOR(6 DOWNTO 0);
+SIGNAL fetIndex : STD_LOGIC_VECTOR(6 DOWNTO 0);
+
+SIGNAL rfEnable : STD_LOGIC;
+SIGNAL rfAddrD : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL rfAddrA : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL rfAddrB : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL rfData_in : STD_LOGIC_VECTOR(15 DOWNTO 0);
+SIGNAL rfOutA : STD_LOGIC_VECTOR(15 DOWNTO 0);
+SIGNAL rfOutB : STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+SIGNAL decInst : STD_LOGIC_VECTOR(15 DOWNTO 0);
+SIGNAL decAddrD : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL decImm : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL decSelR : STD_LOGIC_VECTOR(4 DOWNTO 0);
+SIGNAL decAddrA : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL decAddrB : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL decEnable : STD_LOGIC;
 
 
 BEGIN 
-
-
 
 b2v_inst : seg7_lut
 PORT MAP(iDIG => seg7_in0,
@@ -115,28 +140,17 @@ b2v_inst1 : seg7_lut
 PORT MAP(iDIG => seg7_in1,
 		 oSEG => HEX_out3(6 DOWNTO 0));
 
-
-
-
-
-
-
-
-
 b2v_inst2 : seg7_lut
 PORT MAP(iDIG => seg7_in2,
 		 oSEG => HEX_out2(6 DOWNTO 0));
-
 
 b2v_inst3 : seg7_lut
 PORT MAP(iDIG => seg7_in3,
 		 oSEG => HEX_out1(6 DOWNTO 0));
 
-
 b2v_inst4 : seg7_lut
 PORT MAP(iDIG => seg7_in4,
 		 oSEG => HEX_out0(6 DOWNTO 0));
-
 
 b2v_inst5 : dig2dec
 PORT MAP(		 vol => "1101010110101010",
@@ -146,8 +160,42 @@ PORT MAP(		 vol => "1101010110101010",
 		 seg3 => seg7_in1,
 		 seg4 => seg7_in0);
 
+b2v_inst6 : alu
+PORT MAP(clock => clock,
+     A => aluA,
+     B => aluB,
+     selR => aluSelR,
+     zero_flag => aluZero_f,
+     result => aluResult);
 
+b2v_inst7 : fetch
+PORT MAP(clock => clock,
+     fallback_index => fetFB_i,
+		 flags => fetFlags,
+		 jump_index => fetJump_i,
+		 last_index => fetLast_i,
+		 index => fetIndex);
 
+b2v_inst8 : register_file
+PORT MAP(clock => clock,
+		 enable => rfEnable,
+		 addrDest => rfAddrD,
+		 addrA => rfAddrA,
+		 addrB => rfAddrB,
+		 data_in => rfData_in,
+		 outA => rfOutA,
+		 outB => rfOutB);
+
+b2v_inst9 : decoder
+PORT MAP(reset => reset,
+		 clock => clock,
+		 instruction => decInst,
+		 addrDest => decAddrD,
+		 imm => decImm,
+		 selR => decSelR,
+		 addrA => decAddrA,
+		 addrB => decAddrB,
+		 enable => decEnable);
 
 HEX0 <= HEX_out0;
 HEX1 <= HEX_out1;
@@ -170,8 +218,6 @@ HEX_out1(7) <= '1';
 HEX_out2(7) <= '1';
 HEX_out3(7) <= '1';
 HEX_out4(7) <= '1';
-
-
 
 LEDR <= SW;
 
