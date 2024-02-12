@@ -129,8 +129,8 @@ SIGNAL decSelR : STD_LOGIC_VECTOR(4 DOWNTO 0);
 SIGNAL decAddrA : STD_LOGIC_VECTOR(2 DOWNTO 0);
 SIGNAL decAddrB : STD_LOGIC_VECTOR(2 DOWNTO 0);
 SIGNAL decEnable : STD_LOGIC;
-SIGNAL decA : STD_LOGIC_VECTOR(15 DOWNTO 0);
-SIGNAL decB : STD_LOGIC_VECTOR(15 DOWNTO 0);
+--SIGNAL decA : STD_LOGIC_VECTOR(15 DOWNTO 0);
+--SIGNAL decB : STD_LOGIC_VECTOR(15 DOWNTO 0);
 
 
 BEGIN 
@@ -186,8 +186,8 @@ PORT MAP(reset => reset,
 
 b2v_inst6 : alu
 PORT MAP(clock => clock,
-     A => decA,
-     B => decB,
+     A => rfOutA,
+     B => rfOutB,
      selR => decSelR,
      zero_flag => aluZero_f,
      result => aluResult);
