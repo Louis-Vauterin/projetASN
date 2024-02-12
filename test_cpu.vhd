@@ -23,8 +23,8 @@ architecture testbenchcpu of test_cpu is
         );
     END component;
 
-    signal reset : STD_LOGIC;
-    signal clock : STD_LOGIC;
+    signal reset : STD_LOGIC := '0';
+    signal clock : STD_LOGIC := '0';
     signal MAX10_CLK1_50 : STD_LOGIC;
     signal SW : STD_LOGIC_VECTOR(9 DOWNTO 0);
     signal HEX0 : STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -52,12 +52,12 @@ architecture testbenchcpu of test_cpu is
 
 
         );
-
-        MAX10_CLK1_50 <= not MAX10_CLK1_50 after 10 ns;
+    
+        clock <= not clock after 10 ns;
 
         process is
         begin
-            wait until rising_edge(MAX10_CLK1_50);
+            wait until rising_edge(clock);
         end process;
 end architecture testbenchcpu;
 

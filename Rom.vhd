@@ -17,7 +17,7 @@ end rom;
 architecture rom_a of rom is
 
 type rom is array(0 to 255) of std_logic_vector(15 downto 0); --16 bits to hold 1 instruction
-rom(0) <= "0000001000100000";
+rom(0) <= "0000001000100000"; -- test instruction
 
 signal Data_Rom : rom ;
 
