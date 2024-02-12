@@ -27,18 +27,15 @@ begin
       if reset = '1' then
         null; -- a implementer
       elsif rising_edge(clock) then
+
       -- decode instruction
       opcode <= instruction(15 downto 11);
       selR <= instruction(15 downto 11);
       addrDest <= instruction(10 downto 8);
       addrA <= instruction(4 downto 2);
       addrB <= instruction(7 downto 5);
-      
       imm <= "000000";
 
-      -- use
-      --use_reg_imm <= '1' when not(format = "01") else '0';
-      --use_addrA <= '1' when ins(15 downto 14) = "00" else '0';
     end if;
     end process;
 end Decoder_arch;
