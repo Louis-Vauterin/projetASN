@@ -8,7 +8,7 @@ entity Decoder is
 		 clock : in std_logic;
 		 instruction : in std_logic_vector(15 downto 0);
 		 addrDest : out std_logic_vector(2 downto 0);
-		 imm : out std_logic_vector(5 downto 0);
+		 imm : out std_logic_vector(4 downto 0);
 		 selR : out std_logic_vector(4 downto 0);
 		 addrA : out std_logic_vector(2 downto 0);
 		 addrB : out std_logic_vector(2 downto 0);
@@ -18,8 +18,6 @@ entity Decoder is
 END Decoder;
 
 architecture Decoder_arch of Decoder is
-
-    signal op:          std_logic_vector(2 downto 0);
 
 begin
     process(clock, reset)
@@ -34,7 +32,7 @@ begin
       addrDest <= instruction(10 downto 8);
       addrA <= instruction(4 downto 2);
       addrB <= instruction(7 downto 5);
-      imm <= "000000";
+      imm <= instruction(4 downto 0) when instruction(15 downto 14) /= "01";
 
     end if;
     end process;
