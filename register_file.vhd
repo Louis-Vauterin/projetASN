@@ -22,7 +22,7 @@ type register_array is array (0 to 7) of std_logic_vector(15 downto 0);
 signal registers : register_array;
 
 begin
-
+    
     process(clock, reset)
         begin
             if reset = '1' then
