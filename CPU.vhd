@@ -61,6 +61,7 @@ END COMPONENT;
 
 COMPONENT fetch
 	PORT(clock : IN STD_LOGIC;
+		 enable : IN STD_LOGIC;
 		 fallback_index : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
 		 flags : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
 		 jump_index : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
@@ -117,6 +118,7 @@ SIGNAL	seg7_in5 :  STD_LOGIC_VECTOR(7 DOWNTO 0);
 SIGNAL aluResult : STD_LOGIC_VECTOR(15 DOWNTO 0);
 SIGNAL aluZero_f : STD_LOGIC;
 
+SIGNAL fetEnable : STD_LOGIC;
 SIGNAL fetFB_i : STD_LOGIC_VECTOR(6 DOWNTO 0);
 SIGNAL fetFlags : STD_LOGIC_VECTOR(6 DOWNTO 0);
 SIGNAL fetJump_i : STD_LOGIC_VECTOR(6 DOWNTO 0);
@@ -177,6 +179,7 @@ PORT MAP(		 vol => "1101010110101010",
 
 b2v_inst7 : fetch
 PORT MAP(clock => clock,
+		enable => fetEnable,
      fallback_index => fetFB_i,
 		 flags => fetFlags,
 		 jump_index => fetJump_i,
