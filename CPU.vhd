@@ -50,6 +50,14 @@ COMPONENT alu
 	);
 END COMPONENT;
 
+COMPONENT rom
+	PORT(clock : IN STD_LOGIC;
+		 reset : IN STD_LOGIC;
+		 enable : IN STD_LOGIC;
+		 index : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+		 instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+     	);
+
 COMPONENT fetch
 	PORT(clock : IN STD_LOGIC;
 		 fallback_index : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
@@ -132,6 +140,8 @@ SIGNAL decEnable : STD_LOGIC;
 --SIGNAL decA : STD_LOGIC_VECTOR(15 DOWNTO 0);
 --SIGNAL decB : STD_LOGIC_VECTOR(15 DOWNTO 0);
 
+SIGNAL romInst : STD_LOGIC_VECTOR(15 DOWNTO 0);
+
 
 BEGIN 
 
@@ -172,11 +182,18 @@ PORT MAP(clock => clock,
 		 last_index => fetLast_i,
 		 index => fetIndex);
 
+b2v_inst10 : rom
+PORT MAP(clock => clock;
+		 reset => reset;
+		 enable => decEnable;
+		 index => fetIndex;
+		 instruction => romInst);
+
 
 b2v_inst9 : decoder
 PORT MAP(reset => reset,
 		 clock => clock,
-		 instruction => fetIndex,
+		 instruction => romInst,
 		 addrDest => decAddrD,
 		 imm => decImm,
 		 selR => decSelR,
