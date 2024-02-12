@@ -42,6 +42,7 @@ COMPONENT alu
 	PORT(clock : IN STD_LOGIC;
 		 A : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
 		 B : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+		 IMM : IN STD_LOGIC_VECTOR(4 DOWNTO 0); 
 		 selR : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
 		 result : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
      	 zero_flag : OUT STD_LOGIC
@@ -196,6 +197,7 @@ b2v_inst6 : alu
 PORT MAP(clock => clock,
      A => rfOutA,
      B => rfOutB,
+	 IMM => decImm,
      selR => decSelR,
      zero_flag => aluZero_f,
      result => aluResult);
