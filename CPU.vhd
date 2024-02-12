@@ -102,9 +102,9 @@ SIGNAL	seg7_in3 :  STD_LOGIC_VECTOR(3 DOWNTO 0);
 SIGNAL	seg7_in4 :  STD_LOGIC_VECTOR(3 DOWNTO 0);
 SIGNAL	seg7_in5 :  STD_LOGIC_VECTOR(7 DOWNTO 0);
 
-SIGNAL aluA : STD_LOGIC_VECTOR(15 DOWNTO 0);
-SIGNAL aluB : STD_LOGIC_VECTOR(15 DOWNTO 0);
-SIGNAL aluSelR : STD_LOGIC_VECTOR(4 DOWNTO 0);
+--SIGNAL aluA : STD_LOGIC_VECTOR(15 DOWNTO 0);
+--SIGNAL aluB : STD_LOGIC_VECTOR(15 DOWNTO 0);
+--SIGNAL aluSelR : STD_LOGIC_VECTOR(4 DOWNTO 0);
 SIGNAL aluResult : STD_LOGIC_VECTOR(15 DOWNTO 0);
 SIGNAL aluZero_f : STD_LOGIC;
 
@@ -114,21 +114,23 @@ SIGNAL fetJump_i : STD_LOGIC_VECTOR(6 DOWNTO 0);
 SIGNAL fetLast_i : STD_LOGIC_VECTOR(6 DOWNTO 0);
 SIGNAL fetIndex : STD_LOGIC_VECTOR(6 DOWNTO 0);
 
-SIGNAL rfEnable : STD_LOGIC;
-SIGNAL rfAddrD : STD_LOGIC_VECTOR(2 DOWNTO 0);
-SIGNAL rfAddrA : STD_LOGIC_VECTOR(2 DOWNTO 0);
-SIGNAL rfAddrB : STD_LOGIC_VECTOR(2 DOWNTO 0);
-SIGNAL rfData_in : STD_LOGIC_VECTOR(15 DOWNTO 0);
+--SIGNAL rfEnable : STD_LOGIC;
+--SIGNAL rfAddrD : STD_LOGIC_VECTOR(2 DOWNTO 0);
+--SIGNAL rfAddrA : STD_LOGIC_VECTOR(2 DOWNTO 0);
+--SIGNAL rfAddrB : STD_LOGIC_VECTOR(2 DOWNTO 0);
+--SIGNAL rfData_in : STD_LOGIC_VECTOR(15 DOWNTO 0);
 SIGNAL rfOutA : STD_LOGIC_VECTOR(15 DOWNTO 0);
 SIGNAL rfOutB : STD_LOGIC_VECTOR(15 DOWNTO 0);
 
-SIGNAL decInst : STD_LOGIC_VECTOR(15 DOWNTO 0);
+--SIGNAL decInst : STD_LOGIC_VECTOR(15 DOWNTO 0);
 SIGNAL decAddrD : STD_LOGIC_VECTOR(2 DOWNTO 0);
 SIGNAL decImm : STD_LOGIC_VECTOR(4 DOWNTO 0);
 SIGNAL decSelR : STD_LOGIC_VECTOR(4 DOWNTO 0);
 SIGNAL decAddrA : STD_LOGIC_VECTOR(2 DOWNTO 0);
 SIGNAL decAddrB : STD_LOGIC_VECTOR(2 DOWNTO 0);
 SIGNAL decEnable : STD_LOGIC;
+SIGNAL decA : STD_LOGIC_VECTOR(15 DOWNTO 0);
+SIGNAL decB : STD_LOGIC_VECTOR(15 DOWNTO 0);
 
 
 BEGIN 
@@ -162,14 +164,6 @@ PORT MAP(		 vol => "1101010110101010",
 		 seg3 => seg7_in1,
 		 seg4 => seg7_in0);
 
-b2v_inst6 : alu
-PORT MAP(clock => clock,
-     A => aluA,
-     B => aluB,
-     selR => aluSelR,
-     zero_flag => aluZero_f,
-     result => aluResult);
-
 b2v_inst7 : fetch
 PORT MAP(clock => clock,
      fallback_index => fetFB_i,
@@ -178,27 +172,37 @@ PORT MAP(clock => clock,
 		 last_index => fetLast_i,
 		 index => fetIndex);
 
-b2v_inst8 : register_file
-PORT MAP(clock => clock,
-		 reset => reset,
-		 enable => rfEnable,
-		 addrDest => rfAddrD,
-		 addrA => rfAddrA,
-		 addrB => rfAddrB,
-		 data_in => rfData_in,
-		 outA => rfOutA,
-		 outB => rfOutB);
 
 b2v_inst9 : decoder
 PORT MAP(reset => reset,
 		 clock => clock,
-		 instruction => decInst,
+		 instruction => fetIndex,
 		 addrDest => decAddrD,
 		 imm => decImm,
 		 selR => decSelR,
 		 addrA => decAddrA,
 		 addrB => decAddrB,
 		 enable => decEnable);
+
+b2v_inst6 : alu
+PORT MAP(clock => clock,
+     A => decA,
+     B => decB,
+     selR => decSelR,
+     zero_flag => aluZero_f,
+     result => aluResult);
+
+b2v_inst8 : register_file
+PORT MAP(clock => clock,
+		 reset => reset,
+		 enable => decEnable,
+		 addrDest => decAddrD,
+		 addrA => decAddrA,
+		 addrB => decAddrB,
+		 data_in => aluResult,
+		 outA => rfOutA,
+		 outB => rfOutB);
+
 
 HEX0 <= HEX_out0;
 HEX1 <= HEX_out1;
