@@ -55,7 +55,7 @@ architecture testbench1 of test_decoder is
             wait until rising_edge(sig_clock);
             instruction <= "0000001000100000";
             wait until rising_edge(sig_clock);
-            instruction <= "1000000000000000";
+            instruction <= "1000000000001010";
             end process;
 				
 end architecture testbench1;
