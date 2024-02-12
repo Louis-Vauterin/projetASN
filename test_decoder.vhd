@@ -15,7 +15,7 @@ architecture testbench1 of test_decoder is
 		 clock : in std_logic;
 		 instruction : in std_logic_vector(15 downto 0);
 		 addrDest : out std_logic_vector(2 downto 0);
-		 imm : out std_logic_vector(5 downto 0);
+		 imm : out std_logic_vector(4 downto 0);
 		 selR : out std_logic_vector(4 downto 0);
 		 addrA : out std_logic_vector(2 downto 0);
 		 addrB : out std_logic_vector(2 downto 0);
@@ -27,7 +27,7 @@ architecture testbench1 of test_decoder is
   SIGNAL sig_clock : STD_LOGIC := '0';
   SIGNAL instruction : STD_LOGIC_VECTOR(15 DOWNTO 0);
   SIGNAL addrDest : STD_LOGIC_VECTOR(2 DOWNTO 0);
-  SIGNAL imm : STD_LOGIC_VECTOR(5 DOWNTO 0);
+  SIGNAL imm : STD_LOGIC_VECTOR(4 DOWNTO 0);
   SIGNAL selR : STD_LOGIC_VECTOR(4 DOWNTO 0);
   SIGNAL addrA : STD_LOGIC_VECTOR(2 DOWNTO 0);
   SIGNAL addrB : STD_LOGIC_VECTOR(2 DOWNTO 0);

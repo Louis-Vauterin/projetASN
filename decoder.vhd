@@ -37,8 +37,9 @@ begin
       addrDest <= instruction(10 downto 8);
       addrA <= instruction(4 downto 2);
       addrB <= instruction(7 downto 5);
-      imm <= instruction(4 downto 0) when instruction(15 downto 14) /= "00";
-
+      if instruction(15 downto 14) /= "00" then
+      imm <= instruction(4 downto 0);
+      end if;
     end if;
     end process;
 end Decoder_arch;
