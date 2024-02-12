@@ -55,7 +55,7 @@ COMPONENT rom
 		 reset : IN STD_LOGIC;
 		 enable : IN STD_LOGIC;
 		 index : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-		 instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+		 instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
      	);
 END COMPONENT;
 
@@ -65,7 +65,7 @@ COMPONENT fetch
 		 flags : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
 		 jump_index : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
 		 last_index : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
-		 index : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
+		 index : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
 	);
 END COMPONENT;
 
@@ -121,7 +121,7 @@ SIGNAL fetFB_i : STD_LOGIC_VECTOR(6 DOWNTO 0);
 SIGNAL fetFlags : STD_LOGIC_VECTOR(6 DOWNTO 0);
 SIGNAL fetJump_i : STD_LOGIC_VECTOR(6 DOWNTO 0);
 SIGNAL fetLast_i : STD_LOGIC_VECTOR(6 DOWNTO 0);
-SIGNAL fetIndex : STD_LOGIC_VECTOR(6 DOWNTO 0);
+SIGNAL fetIndex : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
 --SIGNAL rfEnable : STD_LOGIC;
 --SIGNAL rfAddrD : STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -184,10 +184,10 @@ PORT MAP(clock => clock,
 		 index => fetIndex);
 
 b2v_inst10 : rom
-PORT MAP(clock => clock;
-		 reset => reset;
-		 enable => decEnable;
-		 index => fetIndex;
+PORT MAP(clock => clock,
+		 reset => reset,
+		 enable => decEnable,
+		 index => fetIndex,
 		 instruction => romInst);
 
 
